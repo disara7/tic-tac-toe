@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,23 +25,30 @@ class _HomePageState extends State<HomePage> {
   ];
 
   bool oTurn = true; //first player plays O
-  var style1 = TextStyle(color: Colors.white, fontSize: 30);
+  var style1 = TextStyle(color: Colors.white, fontSize: 20);
   int oScore = 0;
   int xScore = 0;
   int filledBoxes = 0;
 
   static var ttcFont = GoogleFonts.pressStart2p(
-      textStyle: TextStyle(color: Colors.white, letterSpacing: 3));
+      textStyle:
+          TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 35));
 
   static var ttcFont2 = GoogleFonts.pressStart2p(
       textStyle:
-          TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25));
+          TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 15));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 43, 10, 100),
+      backgroundColor: const Color.fromARGB(255, 78, 0, 92),
       body: Column(
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(5),
+          ),
+          SizedBox(
+            height: 20,
+          ),
           Expanded(
             child: Container(
               child: Center(
@@ -46,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.all(30.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -54,15 +64,18 @@ class _HomePageState extends State<HomePage> {
                             'Player O',
                             style: ttcFont2,
                           ),
+                          SizedBox(
+                            height: 20,
+                          ),
                           Text(
                             oScore.toString(),
-                            style: ttcFont2,
+                            style: ttcFont,
                           ),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(30.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -70,9 +83,12 @@ class _HomePageState extends State<HomePage> {
                             'Player X',
                             style: ttcFont2,
                           ),
+                          SizedBox(
+                            height: 20,
+                          ),
                           Text(
                             xScore.toString(),
-                            style: ttcFont2,
+                            style: ttcFont,
                           ),
                         ],
                       ),
@@ -85,6 +101,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             flex: 3,
             child: GridView.builder(
+                padding: EdgeInsets.all(25),
                 itemCount: 9,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3),
@@ -96,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       decoration: (BoxDecoration(
                           border: Border.all(
-                              color: Color.fromARGB(255, 66, 66, 66)))),
+                              color: Color.fromARGB(255, 120, 120, 120)))),
                       child: Center(
                           child: Text(
                         displayXO[index],
@@ -210,23 +227,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _WinDialog(String winner) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Winner is: ' + winner),
-            actions: [
-              ElevatedButton(
-                child: Text('Play Again'),
-                onPressed: () {
-                  _clearBoard();
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
+    Dialogs.materialDialog(
+      msg: 'Winner is: $winner',
+      title: 'Congratulations!',
+      // animation: Lottie.asset(
+      //     'assets/your_animation.json'), // Replace 'your_animation.json' with your Lottie animation file path
+      context: context,
+      actions: [
+        IconsButton(
+          onPressed: () {
+            _clearBoard();
+            Navigator.of(context).pop();
+          },
+          text: 'Play Again',
+          iconData: Icons.play_arrow,
+          textStyle: TextStyle(color: Colors.white),
+          iconColor: Colors.white,
+          color: Color.fromARGB(255, 235, 200, 2),
+          //radius: BorderRadius.circular(8),
+        ),
+      ],
+    );
 
     if (winner == 'O') {
       oScore += 1;
